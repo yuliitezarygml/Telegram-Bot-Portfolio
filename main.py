@@ -67,7 +67,7 @@ skills_text = [
 ]
 
 about_text = """
-I'm *Ali Seyedi*, a passionate Front\-End developer with one year of experience \. I continuously enhance my coding skills through online resources, articles, and hands\-on projects \. My journey includes exploring _web and mobile development_, with a focus on *JavaScript* and *TypeScript* \.
+I'm *IULIAN*, a passionate Front\-End developer with one year of experience \. I continuously enhance my coding skills through online resources, articles, and hands\-on projects \. My journey includes exploring _web and mobile development_, with a focus on *JavaScript* and *TypeScript* \.
 I've worked with popular libraries like __React\.js__ and the __Next\.js__ framework \.Check out my skills section for a complete list of technologies I've mastered \. Currently seeking new opportunities to expand my expertise and tackle fresh challenges
 Feel free to share educational resources or projects that align with my goals \.
 👉 ||Let's connect and grow together \!||
