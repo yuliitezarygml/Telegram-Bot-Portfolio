@@ -13,13 +13,12 @@ BOT_USERNAME = '@Yuliitezaryc_bot'
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Buttons
-main_buttons = [[InlineKeyboardButton('👨‍💻 About Me ', callback_data='info'),
-                 InlineKeyboardButton('⌨️  Skills ', callback_data='skills')],
-                [InlineKeyboardButton('🧾  Resume ', callback_data='resume'),
-                 InlineKeyboardButton('🌐 Projects', callback_data='project')],
-                [InlineKeyboardButton('📞  Contact', callback_data='contact')]
-                ]
+# Language Buttons
+language_buttons = [[InlineKeyboardButton('Русский', callback_data='set_lang_ru'),
+                     InlineKeyboardButton('English', callback_data='set_lang_en')]]
+
+# Main Buttons (Language-specific, will be set later)
+main_buttons = []
 
 contact_buttons = [
     [InlineKeyboardButton('🔮 GitHub', url='https://github.com/settings/admin'),
@@ -37,45 +36,100 @@ resume_buttons = [[InlineKeyboardButton('📰 PDF ', callback_data='pdf'),
                   [InlineKeyboardButton('🔙  Back', callback_data='back_contact')]
                   ]
 
-# Text
-skills_text = [
-    "*Languages*",
-    "   HTML",
-    "   JavaScript",
-    "   TypeScript",
-    "*Libraries & Framework*",
-    "   React\.js",
-    "   Next\.js",
-    "   Redux",
-    "   Redux Toolkit",
-    "   React Query",
-    "*Styles*",
-    "   Css",
-    "   Sass",
-    "   Tailwind Css",
-    "   Bootstrap",
-    "   Material\-UI",
-    "   Ant\-Design",
-    "   Shadcn\-UI",
-    "*Tools*",
-    "   Git",
-    "   Git Hub",
-    "   Post Man",
-    "   Fire base",
-    "   Supa base",
-    "   Figma",
-]
+# Texts for different languages
+skills_text = {
+    "en": [
+        "*Languages*",
+        "   HTML",
+        "   JavaScript",
+        "   TypeScript",
+        "*Libraries & Framework*",
+        "   React\.js",
+        "   Next\.js",
+        "   Redux",
+        "   Redux Toolkit",
+        "   React Query",
+        "*Styles*",
+        "   Css",
+        "   Sass",
+        "   Tailwind Css",
+        "   Bootstrap",
+        "   Material\-UI",
+        "   Ant\-Design",
+        "   Shadcn\-UI",
+        "*Tools*",
+        "   Git",
+        "   Git Hub",
+        "   Post Man",
+        "   Fire base",
+        "   Supa base",
+        "   Figma",
+    ],
+    "ru": [
+        "*Языки*",
+        "   HTML",
+        "   JavaScript",
+        "   TypeScript",
+        "*Библиотеки и Фреймворки*",
+        "   React\.js",
+        "   Next\.js",
+        "   Redux",
+        "   Redux Toolkit",
+        "   React Query",
+        "*Стили*",
+        "   Css",
+        "   Sass",
+        "   Tailwind Css",
+        "   Bootstrap",
+        "   Material\-UI",
+        "   Ant\-Design",
+        "   Shadcn\-UI",
+        "*Инструменты*",
+        "   Git",
+        "   Git Hub",
+        "   Post Man",
+        "   Fire base",
+        "   Supa base",
+        "   Figma",
+    ]
+}
 
-about_text = """
+about_text = {
+    "en": """
 I'm *IULIAN*, a passionate Front\-End developer with one year of experience \. I continuously enhance my coding skills through online resources, articles, and hands\-on projects \. My journey includes exploring _web and mobile development_, with a focus on *JavaScript* and *TypeScript* \.
 I've worked with popular libraries like __React\.js__ and the __Next\.js__ framework \.Check out my skills section for a complete list of technologies I've mastered \. Currently seeking new opportunities to expand my expertise and tackle fresh challenges
 Feel free to share educational resources or projects that align with my goals \.
 👉 ||Let's connect and grow together \!||
+""",
+    "ru": """
+Я *ЮЛИАН*, увлеченный Front\-End разработчик с годом опыта работы \. Я постоянно совершенствую свои навыки кодирования с помощью онлайн-ресурсов, статей и практических проектов \. Мое путешествие включает исследование _веба и мобильной разработки_, с упором на *JavaScript* и *TypeScript* \.
+Я работал с популярными библиотеками, такими как __React\.js__ и фреймворком __Next\.js__ \. Ознакомьтесь с разделом навыков, чтобы увидеть полный список технологий, которые я освоил \. В настоящее время я ищу новые возможности для расширения своего опыта и решения новых задач \.
+Не стесняйтесь делиться образовательными ресурсами или проектами, которые соответствуют моим целям \.
+👉 ||Давайте свяжемся и будем расти вместе \!||
 """
+}
+
+# Main Buttons for English and Russian
+main_buttons_text = {
+    "en": [[InlineKeyboardButton('👨‍💻 About Me ', callback_data='info'),
+            InlineKeyboardButton('⌨️  Skills ', callback_data='skills')],
+           [InlineKeyboardButton('🧾  Resume ', callback_data='resume'),
+            InlineKeyboardButton('🌐 Projects', callback_data='project')],
+           [InlineKeyboardButton('📞  Contact', callback_data='contact')]
+           ],
+    "ru": [[InlineKeyboardButton('👨‍💻 Обо мне ', callback_data='info'),
+            InlineKeyboardButton('⌨️  Навыки ', callback_data='skills')],
+           [InlineKeyboardButton('🧾  Резюме ', callback_data='resume'),
+            InlineKeyboardButton('🌐 Проекты', callback_data='project')],
+           [InlineKeyboardButton('📞  Контакт', callback_data='contact')]
+           ]
+}
+
 
 class MyBot:
     def __init__(self, token):
         self.app = Application.builder().token(token).build()
+        self.language = "en"  # Default language
 
     def run(self):
         self.add_handlers()
@@ -101,7 +155,7 @@ class MyBot:
         await update.callback_query.edit_message_text(text='Welcome to my bot!', reply_markup=self.create_inline_keyboard(main_buttons))
 
     async def send_information(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await update.callback_query.edit_message_text(text=about_text, reply_markup=self.create_inline_keyboard(back_buttons), parse_mode="MarkdownV2")
+        await update.callback_query.edit_message_text(text=about_text[self.language], reply_markup=self.create_inline_keyboard(back_buttons), parse_mode="MarkdownV2")
 
     async def send_contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.callback_query.edit_message_text(text='Select a contact option:', reply_markup=self.create_inline_keyboard(contact_buttons))
@@ -190,7 +244,7 @@ class MyBot:
         await update.callback_query.edit_message_text('Here you can find *My Resume*', reply_markup=self.create_inline_keyboard(resume_buttons), parse_mode="MarkdownV2")
 
     async def send_skills(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        skill_text = "\n".join(skills_text)
+        skill_text = "\n".join(skills_text[self.language])
         await update.callback_query.edit_message_text(text=skill_text, reply_markup=self.create_inline_keyboard(back_buttons), parse_mode="MarkdownV2")
 
     async def handle_button_press(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -217,18 +271,19 @@ class MyBot:
             await self.send_repo_details(update, context, repo_id)
         elif data == "back_contact":
             await self.send_back_contact(update, context)
+        elif data == "set_lang_ru":
+            self.language = "ru"
+            await update.callback_query.edit_message_text(text="Язык изменен на Русский", reply_markup=self.create_inline_keyboard(main_buttons_text["ru"]))
+        elif data == "set_lang_en":
+            self.language = "en"
+            await update.callback_query.edit_message_text(text="Language set to English", reply_markup=self.create_inline_keyboard(main_buttons_text["en"]))
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_name = update.message.from_user.first_name
         logger.info(f'Start command received from user: {user_name}')
         
-        # First, send the photo
-        photo_path = 'photo.jpg'
-        with open(photo_path, 'rb') as photo:
-            await context.bot.send_photo(chat_id=update.message.chat_id, photo=InputFile(photo, filename='photo.jpg'))
-        
-        # Then send the welcome message with buttons
-        await update.message.reply_text(f'Welcome to My Bot, {user_name}!', reply_markup=self.create_inline_keyboard(main_buttons))
+        # Send the welcome message with language selection buttons
+        await update.message.reply_text(f'Welcome to My Bot, {user_name}! Please select your language:', reply_markup=self.create_inline_keyboard(language_buttons))
 
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if update.message:
@@ -253,7 +308,7 @@ class MyBot:
 
         if "hello" in processed:
             return f'Hey there, {user_name}!'
-        return f"😜Scuze, nu înțeleg exact ce dorești. Te rog să clarifici sau să legi opțiunile date., {user_name} ..."
+        return f"😜 Sorry, I don't quite understand what you want. Please clarify or select the given options, {user_name} ..."
 
     async def error(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.error(f'Update {update} caused error {context.error}')
