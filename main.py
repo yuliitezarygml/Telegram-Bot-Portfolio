@@ -23,10 +23,10 @@ main_buttons = [[InlineKeyboardButton('👨‍💻 About Me ', callback_data='in
                 ]
 
 contact_buttons = [
-    [InlineKeyboardButton('🔮 GitHub', url='https://github.com/aliseyedi01'),
+    [InlineKeyboardButton('🔮 GitHub', url='https://github.com/settings/admin'),
         InlineKeyboardButton('👨‍💻 LinkedIn', url='https://www.linkedin.com/in/aliseyedi01/')],
     [InlineKeyboardButton('✉ Email', url='https://mail.google.com/mail/u/0/?view=cm&fs=1&to=aliseyedi07@gmail.com1'),
-        InlineKeyboardButton('🗯 Chat', url='https://t.me/aliseyedi01')],
+        InlineKeyboardButton('🗯 Chat', url='https://t.me/yuliitezary')],
     [InlineKeyboardButton('🔙 Back', callback_data='back_contact')]
 ]
 
@@ -34,7 +34,7 @@ back_buttons = [[InlineKeyboardButton('🔙 Back', callback_data='back_contact')
 
 
 resume_buttons = [[InlineKeyboardButton('📰 PDF ', callback_data='pdf'),
-                   InlineKeyboardButton('🖥  Website ', url='https://portfolio-aliseyedi01.vercel.app/en')],
+                   InlineKeyboardButton('🖥  Website ', url='https://yulii-71eaf.web.app/')],
                   [InlineKeyboardButton('🔙  Back', callback_data='back_contact')]
                   ]
 # text
